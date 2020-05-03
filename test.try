@@ -1,0 +1,26 @@
+# Fibonacci sequence
+func fun{ 
+	if(x < 2){  return(1); }
+	y = 0;
+	x = x - 1;
+	y = fun(x);
+	x = x - 1;
+	return(y + fun(x));
+};
+
+x=6;
+print(x);				# output a number
+print(fun(x));
+
+z = "hello world!";		# output a string
+puts(z);
+
+array arr(10);			# use an array
+i = 0;
+while(i < 10){
+	print(i);
+	arr[i] = i+5;
+	i=i+1;
+}
+print(arr[5+2]);
+
