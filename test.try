@@ -1,6 +1,6 @@
 # Fibonacci sequence
 func fun{ 
-	if(x < 2){  return(1); }
+	if(x < 2){  return(1);  }
 	y = 0;
 	x = x - 1;
 	y = fun(x);
@@ -9,7 +9,8 @@ func fun{
 };
 
 x=6;
-print(x);				# output a number
+if( x > 5 )
+	print( x );		# output a number
 print(fun(x));
 
 z = "hello world!";		# output a string
@@ -17,7 +18,7 @@ puts(z);
 
 array arr(10);			# use an array
 i = 0;
-while(i < 10){
+while(i < 10){			# assign an array
 	print(i);
 	arr[i] = i+5;
 	i=i+1;

@@ -54,6 +54,7 @@ double term();
 void match(int tk);
 void next();
 
+/* -------------------  lexical analysis  ---------------------------------*/
 /* get the next token of the input string */
 void next() {
     char* last_pos;
@@ -224,7 +225,7 @@ void match(int tk) {
     }
 }
 
-/*------------------------------------------------------------*/
+/*--------------------------  grammatical analysis and run ----------------------------------*/
 
 double term() {
     double temp = factor();
