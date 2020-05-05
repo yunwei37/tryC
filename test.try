@@ -1,6 +1,8 @@
 # Fibonacci sequence
 func fun{ 
-	if(x < 2){  return(1);  }
+	if(x <= 2){  
+		return(1);  
+	}
 	y = 0;
 	x = x - 1;
 	y = fun(x);
@@ -8,20 +10,18 @@ func fun{
 	return(y + fun(x));
 };
 
-x=6;
-if( x > 5 )
-	print( x );		# output a number
-print(fun(x));
+# save the Fibonacci sequence of 1 to 15 in an array 
+array arr(15);	
+x = 1;
+while( x <= 15 ){
+	arr[x - 1] = fun(x);
+	x = x + 1;
+}
 
-z = "hello world!";		# output a string
-puts(z);
-
-array arr(10);			# use an array
+puts("Fibonacci sequence:");
+# print the Fibonacci sequence of 1 to 15
 i = 0;
-while(i < 10){			# assign an array
-	print(i);
-	arr[i] = i+5;
+while(i < 15){			
+	print(arr[i]);
 	i=i+1;
 }
-print(arr[5+2]);
-

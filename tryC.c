@@ -1,5 +1,6 @@
 ﻿#include <stdio.h>
 #include <float.h>
+#include <ctype.h>
 
 #define POOLSIZE  (256 * 1024)  // arbitrary size
 #define SYMTABSIZE (1024*8)     // size of the symbol table stack
@@ -53,7 +54,6 @@ double factor();
 double term();
 void match(int tk);
 void next();
-
 /* -------------------  lexical analysis  ---------------------------------*/
 /* get the next token of the input string */
 void next() {
@@ -96,7 +96,11 @@ void next() {
                         token = symtab[i].type;
                     }
                     else {
-                        token = symtab[i].type;
+                        if (symtab[i].type == Void) {
+                            token = Sym;
+                            token_val.ptr = &symtab[i];
+                        }
+                        else token = symtab[i].type;
                     }
                     return;
                 }
@@ -217,6 +221,12 @@ void next() {
 
 void match(int tk) {
     if (token == tk) {
+        if (compileState == debug) {
+            if(isprint(tk))
+                printf("match: %c\n", tk );
+            else
+                printf("match: %d\n", tk);
+        }
         next();
     }
     else {

@@ -10,4 +10,4 @@ tryC是一个用c语言手搓的非常简单的解释器，大约500+行：
     build:
         gcc -o tryc tryC.c
 
-    usage: tryc [-d] {filename}
+    usage: tryc [-d] filename
