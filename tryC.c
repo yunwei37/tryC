@@ -5,6 +5,7 @@
 #define POOLSIZE  (256 * 1024)  // arbitrary size
 #define SYMTABSIZE (1024*8)     // size of the symbol table stack
 #define MAXNAMESIZE 32          // size of variable/function name
+#define RETURNFLAG DBL_MAX             // indicate a return statement has occured in a function
 
 /* this structure represent a symbol store in a symbol table */
 typedef struct symStruct {  
@@ -79,10 +80,10 @@ void next() {
                 nameBuffer[src - last_pos] = *src;
                 src++;
             }
-            nameBuffer[src - last_pos] = 0;
+            nameBuffer[src - last_pos] = 0;                 // get symbol name
             int i;
-            for (i = symPointer-1; i >= 0; --i) {
-                if (strcmp(nameBuffer, symtab[i].name) == 0) {
+            for (i = symPointer-1; i >= 0; --i) {           // search symbol in symbol table 
+                if (strcmp(nameBuffer, symtab[i].name) == 0) {      // if find symbol: return the token according to symbol type
                     if (symtab[i].type == Num || symtab[i].type == Char) {
                         token_val.ptr = &symtab[i];
                         token = Sym;
@@ -105,7 +106,7 @@ void next() {
                     return;
                 }
             }
-            strcpy(symtab[symPointer].name, nameBuffer);
+            strcpy(symtab[symPointer].name, nameBuffer);        // if symbol not found, create a new one 
             symtab[symPointer].levelNum = currentlevel;
             symtab[symPointer].type = Void;
             token_val.ptr = &symtab[symPointer];
@@ -382,9 +383,8 @@ double statement() {
     if (token == '{') {
         match('{');
         while (token != '}') {
-            if (DBL_MAX == statement()) {
-                return DBL_MAX;
-            }
+            if (RETURNFLAG == statement()) 
+                return RETURNFLAG;
         }
         match('}');
     }
@@ -394,17 +394,15 @@ double statement() {
         int boolresult = boolOR();
         match(')');
         if (boolresult) {
-            if (DBL_MAX == statement()) {
-                return DBL_MAX;
-            }
+            if (RETURNFLAG == statement()) 
+                return RETURNFLAG;
         }
         else skipStatments();
         if (token == Else) {
             match('Else');
             if (!boolresult) {
-                if (DBL_MAX == statement()) {
-                    return DBL_MAX;
-                }
+                if (RETURNFLAG == statement())
+                    return RETURNFLAG;
             }
             else skipStatments();
         }
@@ -422,9 +420,8 @@ double statement() {
             boolresult = boolOR();
             match(')');
             if (boolresult) {
-                if (DBL_MAX == statement()) {
-                    return DBL_MAX;
-                }
+                if (RETURNFLAG == statement()) 
+                    return RETURNFLAG;
             }
             else skipStatments();
         }while (boolresult);
@@ -492,7 +489,7 @@ double statement() {
         return_val = expression();
         match(')');
         match(';');
-        return DBL_MAX;
+        return RETURNFLAG;
     }
     else if (token == Print || token == Read || token == Puts) {
         int func = token;
@@ -521,6 +518,7 @@ double statement() {
 
 double function() {
     currentlevel++;
+    return_val = 0;
 
     symbol* s = token_val.ptr;
     match(FuncSym);
