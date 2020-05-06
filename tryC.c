@@ -36,7 +36,7 @@ enum {
     Num = 128, Char, Str, Array, Func,
     Else, If, Return, While, Print,Puts, Read,
     Assign, OR, AND, Equal, Sym, FuncSym, ArraySym, Void,
-    Nequal, LessEqual, GreatEqual, Inc, Dec
+    Nequal, LessEqual, GreatEqual
 };
 int token;                      // current token type
 union tokenValue {
@@ -160,20 +160,6 @@ void next() {
             }
             return;
         }
-        else if (token == '+') {            // parse '+' and '++'
-            if (*src == '+') {
-                src++;
-                token = Inc;
-            }
-            return;
-        }
-        else if (token == '-') {            // parse '-' and '--'
-            if (*src == '-') {
-                src++;
-                token = Dec;
-            }
-            return;
-        }
         else if (token == '!') {               // parse '!='
             if (*src == '=') {
                 src++;
@@ -209,7 +195,7 @@ void next() {
             }
             return;
         }
-        else if ( token == '*' || token == '/'  || token == ';' || token == ',' ||
+        else if ( token == '*' || token == '/'  || token == ';' || token == ',' || token == '+' || token == '-' ||
             token == '(' || token == ')' || token == '{' || token == '}' ||  token == '[' || token == ']') {
             return;
         }
@@ -260,21 +246,9 @@ double factor() {
         temp = expression();
         match(')');
     }
-    else if (token == Inc) {
-        match(Inc);
-        temp = token_val.ptr->value;
-        (token_val.ptr->value)++;
-        match(Sym);
-    }
-    else if (token == Dec) {
-        match(Dec);
-        temp = token_val.ptr->value;
-        (token_val.ptr->value)--;
-        match(Sym);
-    }
     else if(token == Num ||  token == Char){
         temp = token_val.val;
-        match(Num);
+        match(token);
     }
     else if (token == Sym) {
         temp = token_val.ptr->value;
