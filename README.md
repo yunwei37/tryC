@@ -28,3 +28,5 @@ usage:
 [用c语言手搓一个600行的类c语言解释器: 给编程初学者的解释器教程（1）- 目标和前言](https://blog.csdn.net/qq_42779423/article/details/105938297)
 
 [用c语言手搓一个600行的类c语言解释器: 给编程初学者的解释器教程（2）- 简介和设计](https://blog.csdn.net/qq_42779423/article/details/105939788)
+
+[用c语言手搓一个600行的类c语言解释器: 给编程初学者的解释器教程（3）- 词法分析](https://blog.csdn.net/qq_42779423/article/details/105948289)
