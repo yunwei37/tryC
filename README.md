@@ -35,3 +35,5 @@ usage:
 [用c语言手搓一个600行的类c语言解释器: 给编程初学者的解释器教程（4）- 语法分析1：EBNF和递归下降文法](https://blog.csdn.net/qq_42779423/article/details/105954353)
 
 [用c语言手搓一个600行的类c语言解释器: 给编程初学者的解释器教程（5）- 语法分析2: tryC的语法分析实现](https://blog.csdn.net/qq_42779423/article/details/105954455)
+
+[用c语言手搓一个600行的类c语言解释器: 给编程初学者的解释器教程（6）- 语义分析：符号表和变量、函数](https://blog.csdn.net/qq_42779423/article/details/105979594)
