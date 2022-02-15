@@ -1,4 +1,6 @@
 ﻿#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <float.h>
 #include <ctype.h>
 
@@ -55,12 +57,14 @@ double factor();
 double term();
 void match(int tk);
 void next();
+
 /* -------------------  lexical analysis  ---------------------------------*/
 /* get the next token of the input string */
+
 void next() {
     char* last_pos;
 
-    while (token = *src) {
+    while ((token = *src)) {
         ++src;
         if (token == '\n') {                // a new line
             if(compileState == debug)       // if on debug mode, print the currnet process line
@@ -146,7 +150,7 @@ void next() {
             if (*src) {
                 *src = 0;
                 token_val.ptr = malloc(sizeof(char) * numCount + 8);
-                strcpy(token_val.ptr, last_pos);
+                strcpy((char *)token_val.ptr, last_pos);
                 *src = token;
                 src++;
             }
@@ -440,7 +444,7 @@ double statement() {
         match('(');
         int length = (int)expression();
         match(')');
-        s->pointer.list = (double*)malloc(sizeof(struct symStruct) * length + 1);
+        s->pointer.list = malloc(sizeof(struct symStruct) * length + 1);
         for (int i = 0; i < length; ++i)
             s->pointer.list[i].type = Num;
         s->value = length;
