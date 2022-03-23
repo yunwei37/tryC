@@ -3,6 +3,8 @@
 #include <string.h>
 #include <float.h>
 #include <ctype.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #define POOLSIZE  (256 * 1024)  // arbitrary size
 #define SYMTABSIZE (1024*8)     // size of the symbol table stack
@@ -68,7 +70,7 @@ void next() {
         ++src;
         if (token == '\n') {                // a new line
             if(compileState == debug)       // if on debug mode, print the currnet process line
-                printf("%.*s",  src - old_src, old_src);
+                printf("%.*s",  (int)(src - old_src), old_src);
             old_src = src;
         }
         else if (token == '#') {            // skip comments
@@ -141,7 +143,6 @@ void next() {
         }
         else if (token == '"' ) {               // parse string
             last_pos = src;
-            char tval;
             int numCount = 0;
             while (*src != 0 && *src != token) {
                 src++;
@@ -221,7 +222,7 @@ void match(int tk) {
         next();
     }
     else {
-        printf("line %.*s:expected token: %d\n", src - old_src, old_src,  tk);
+        printf("line %.*s:expected token: %d\n", (int)(src - old_src), old_src,  tk);
         exit(-1);
     }
 }
@@ -324,11 +325,23 @@ int boolexp() {
     return 0;
 }
 
+void skipBoolExpr() {
+    int count = 0;
+    while (token && !(token == ')' && count == 0)) {
+        if (token == '(') count++;
+        if (token == ')') count--;
+        token = *src++;
+    }
+}
+
 int boolAND() {
     int val = boolexp();           
     while (token == AND) {
         match(AND);
-        if (val == 0)    return 0;         // short cut
+        if (val == 0){
+            skipBoolExpr();
+            return 0;         // short cut
+        }
         val = val & boolexp();
         if (val == 0) return 0;
     }
@@ -339,8 +352,12 @@ int boolOR() {
     int val = boolAND();
     while (token == OR) {
         match(OR);
-        if (val == 1)    return 1;         // short cut
+        if (val == 1){
+            skipBoolExpr();
+            return 1;         // short cut
+        }
         val = val | boolAND();
+        if (val == 1) return 1;
     }
     return val;
 }
@@ -377,7 +394,7 @@ double statement() {
         }
         else skipStatments();
         if (token == Else) {
-            match('Else');
+            match(Else);
             if (!boolresult) {
                 if (RETURNFLAG == statement())
                     return RETURNFLAG;
